@@ -89,9 +89,6 @@ const
    kLTAttribute = 'lt';
    kHrefAttribute = 'href';
    kNonNormative = '本节是非规范的。';
-   Months: array[1..12] of UTF8String = ('一月', '二月', '三月', '四月',
-                                         '五月', '六月', '七月', '八月', '九月',
-                                         '十月', '十一月', '十二月');
 
 type
    TElementMap = specialize THashTable <UTF8String, TElement, UTF8StringUtils>;
@@ -1090,7 +1087,7 @@ var
    function ProcessNode(var Node: TNode): Boolean; // return True if we are to keep this node, False if we drop it
    const
       CommitSnapshotBaseURL: AnsiString = '/commit-snapshots/';
-      SourceGitBaseURL: AnsiString = 'https://github.com/whatwg/html/commit/';
+      SourceGitBaseURL: AnsiString = 'https://github.com/imhele/html/commit/';
       kExport = 'export';
       kDataExport = 'data-export';
       kNoExport = 'noexport';
@@ -1459,14 +1456,15 @@ var
                begin
                   Scratch := Default(Rope);
                   DecodeDate(Date, TodayYear, TodayMonth, TodayDay);
+                  Scratch.Append(IntToStr(TodayYear));
                   if (ClassName = 'pubdate') then
                   begin
+                     Scratch.Append('年');
+                     Scratch.Append(IntToStr(TodayMonth)); // $R-
+                     Scratch.Append('月');
                      Scratch.Append(IntToStr(TodayDay));
-                     Scratch.Append($0020);
-                     Scratch.Append(@Months[TodayMonth][1], Length(Months[TodayMonth])); // $R-
-                     Scratch.Append($0020);
+                     Scratch.Append('日');
                   end;
-                  Scratch.Append(IntToStr(TodayYear));
                   TText(Element.FirstChild).Data := Scratch;
                end;
             end
